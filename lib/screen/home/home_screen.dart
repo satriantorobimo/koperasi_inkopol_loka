@@ -52,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Image.asset(
-                    'assets/imgs/logo_company.png',
-                    width: 120,
+                    'assets/imgs/360logo.png',
+                    width: 100,
                   ),
                   Text(
                     'Ajukan Pinjaman',
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             items: images,
             builderFunction: (context, item) {
               return ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(41)),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
                 child: Container(
                     width: MediaQuery.of(context).size.width * 0.90,
                     color: Colors.blue,
@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   items: images,
                   builderFunction: (context, item) {
                     return ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
                       child: Container(
                           width: MediaQuery.of(context).size.width * 0.70,
                           color: Colors.blue,

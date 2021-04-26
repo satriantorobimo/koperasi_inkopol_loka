@@ -19,10 +19,10 @@ class CustomRoundedButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.transparent,
             border: Border.all(color: color),
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
-            "More",
+            "$buttonText",
             style: TextStyle(color: color),
           ),
         ),

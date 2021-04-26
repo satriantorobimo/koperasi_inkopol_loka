@@ -25,6 +25,10 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
       backgroundColor: Color(0xffdee4eb),
       key: _scaffoldKey,
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Image.asset('assets/imgs/logo-inkopol.png'),
+        ),
         title: Text(
           'LOKA',
           style: TextStyle(

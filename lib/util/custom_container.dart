@@ -16,7 +16,7 @@ class CustomContainer extends StatelessWidget {
             spreadRadius: 5.0,
           ),
         ],
-        borderRadius: BorderRadius.circular(41),
+        borderRadius: BorderRadius.circular(8),
         color: Colors.white,
       ),
       child: child,

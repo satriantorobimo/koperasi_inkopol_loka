@@ -28,7 +28,27 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+              child: Image.asset(
+            'assets/imgs/logo-inkopol.png',
+            width: MediaQuery.of(context).size.width * 0.5,
+          )),
+          SizedBox(height: 24),
+          Center(
+            child: Text(
+              'LOKA',
+              style: TextStyle(
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
+                fontSize: 26.0,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
