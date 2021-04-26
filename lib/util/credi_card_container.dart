@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loka_apps/util/color_swatch.dart';
 
 class CreditCardContainer extends StatelessWidget {
   const CreditCardContainer({
@@ -13,13 +14,13 @@ class CreditCardContainer extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-              blurRadius: 5.0, color: Colors.green[200], offset: Offset(0, 5)),
+              blurRadius: 5.0, color: Colors.blue[200], offset: Offset(0, 5)),
         ],
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(8.0),
         gradient: LinearGradient(
           colors: [
-            Color(0xFFD0E562),
-            Color(0xFF93C48B),
+            ColorsSwatch.softBlue,
+            ColorsSwatch.awsomeBlue,
           ],
         ),
       ),

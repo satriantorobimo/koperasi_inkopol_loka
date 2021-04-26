@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:loka_apps/screen/bottom_navbar/bottom_navbar_screen.dart';
-import 'package:loka_apps/screen/input_phone_number/input_phone_number_screen.dart';
+import 'package:loka_apps/screen/login/login_screen.dart';
+import 'package:loka_apps/util/color_swatch.dart';
 
 class OnboardingScreen extends StatelessWidget {
   @override
@@ -16,7 +16,7 @@ class OnboardingScreen extends StatelessWidget {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                    color: Color(0xFF93C48B), shape: BoxShape.circle),
+                    color: ColorsSwatch.awsomeBlue, shape: BoxShape.circle),
                 child: Center(
                     child: Text('LOKA',
                         style: TextStyle(fontSize: 25, color: Colors.white)))),
@@ -41,7 +41,7 @@ class OnboardingScreen extends StatelessWidget {
               ),
             ),
             Container(
-              width: 205,
+              width: 300,
               child: Text(
                 'Ajukan pinjaman dengan rasa Aman tanpa kuatir tidak dapat mengembalikan',
                 style: TextStyle(fontSize: 15),
@@ -55,13 +55,12 @@ class OnboardingScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 8),
                 height: 45,
                 child: RaisedButton(
-                  color: Color(0xFF93C48B),
+                  color: ColorsSwatch.awsomeBlue,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(8)),
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => InputPhoneNumberScreen()),
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
                         (Route<dynamic> route) => false);
                   },
                   child: Text("Next", style: TextStyle(color: Colors.white)),
