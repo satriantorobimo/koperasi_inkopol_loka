@@ -7,24 +7,23 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(top: 60),
+        margin: EdgeInsets.only(top: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                    color: ColorsSwatch.awsomeBlue, shape: BoxShape.circle),
-                child: Center(
-                    child: Text('LOKA',
-                        style: TextStyle(fontSize: 25, color: Colors.white)))),
+            Center(
+                child: Image.asset(
+              'assets/imgs/logo-inkopol.png',
+              width: MediaQuery.of(context).size.width * 0.3,
+            )),
+            SizedBox(height: 8),
+            Text('LOKA', style: TextStyle(fontSize: 25, color: Colors.black)),
             Padding(
               padding: const EdgeInsets.only(
                 left: 32.0,
                 right: 32.0,
-                top: 24.0,
+                top: 16.0,
               ),
               child: Card(
                 semanticContainer: true,
