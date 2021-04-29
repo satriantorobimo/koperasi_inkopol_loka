@@ -21,15 +21,13 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      color: ColorsSwatch.awsomeBlue, shape: BoxShape.circle),
-                  child: Center(
-                      child: Text('LOKA',
-                          style:
-                              TextStyle(fontSize: 25, color: Colors.white)))),
+              Center(
+                  child: Image.asset(
+                'assets/imgs/logo-inkopol.png',
+                width: MediaQuery.of(context).size.width * 0.3,
+              )),
+              SizedBox(height: 8),
+              Text('LOKA', style: TextStyle(fontSize: 25, color: Colors.black)),
               SizedBox(height: 24),
               Container(
                 padding: EdgeInsets.all(16),

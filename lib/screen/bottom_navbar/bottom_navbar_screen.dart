@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loka_apps/screen/home/home_screen.dart';
+import 'package:loka_apps/screen/notifikasi/notifikai_screen.dart';
 import 'package:loka_apps/screen/profile/profile_screen.dart';
-import 'package:loka_apps/screen/transaction/transaction_screen.dart';
+import 'package:loka_apps/screen/transaksi/transaksi_screen.dart';
 
 class BottomNavbarScreen extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     HomeScreen(),
-    TransactionScreen(),
+    TransaksiScreen(),
     ProfileScreen()
   ];
 
@@ -66,7 +67,11 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
                 ],
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => NotifikasiScreen()),
+              );
+            },
           ),
         ],
       ),
