@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:loka_apps/function/shared_pref.dart';
+import 'package:loka_apps/screen/bottom_navbar/bottom_navbar_screen.dart';
 import 'package:loka_apps/screen/onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,9 +21,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _getData() {
     Timer(const Duration(seconds: 2), () {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => OnboardingScreen()),
-          (Route<dynamic> route) => false);
+      SharedPref().getSharedString('token').then((value) {
+        if (value != null) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => BottomNavbarScreen()),
+              (Route<dynamic> route) => false);
+        } else {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => OnboardingScreen()),
+              (Route<dynamic> route) => false);
+        }
+      });
     });
   }
 

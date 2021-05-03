@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "883143724894",
+    "project_id": "inkopol-loka",
+    "storage_bucket": "inkopol-loka.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883143724894:android:1942399ccb65e1b05489cf",
+        "android_client_info": {
+          "package_name": "com.loka.loka_apps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883143724894-0et7jofsmomka4mfmdk8j4gg33g2l57i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.loka.loka_apps",
+            "certificate_hash": "c781d5b725db2fe520aa76bc731a32700cd19369"
+          }
+        },
+        {
+          "client_id": "883143724894-qdvk5pilb4f3l1irvhqesppum9hjj3u4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDve-Ul8XMMhwXxuk2R67pDCRkFJGe2bMs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883143724894-qdvk5pilb4f3l1irvhqesppum9hjj3u4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
