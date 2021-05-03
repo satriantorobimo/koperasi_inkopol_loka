@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loka_apps/bloc/profile/bloc.dart';
+import 'package:loka_apps/function/shared_pref.dart';
+import 'package:loka_apps/repo/profile/profile_repo.dart';
 import 'package:loka_apps/screen/login/login_screen.dart';
 import 'package:loka_apps/util/color_swatch.dart';
+import 'package:loka_apps/model/profile/response_profile_model.dart';
+import 'package:loka_apps/util/custom_loader.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);
@@ -10,8 +16,55 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  ProfileBloc profileBloc = ProfileBloc(profileRepository: ProfileRepository());
+  final GlobalKey<State> _keyLoader = GlobalKey<State>();
+  @override
+  void initState() {
+    SharedPref().getSharedString('token').then((value) {
+      if (value != null) {
+        profileBloc.add(GetProfile(value));
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    profileBloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return BlocListener<ProfileBloc, ProfileState>(
+        cubit: profileBloc,
+        listener: (_, ProfileState state) {
+          if (state is ProfileLoading) {
+            LoaderDialogs.showLoadingDialog(context, _keyLoader);
+          }
+          if (state is ProfileLoaded) {}
+          if (state is ProfileError) {}
+        },
+        child: BlocBuilder<ProfileBloc, ProfileState>(
+            cubit: profileBloc,
+            builder: (_, ProfileState state) {
+              if (state is ProfileInitial) {
+                return Container();
+              }
+              if (state is ProfileLoading) {
+                return Container();
+              }
+              if (state is ProfileLoaded) {
+                return _mainContent(state.responseProfileModel);
+              }
+              if (state is ProfileError) {
+                return Container();
+              }
+              return Container();
+            }));
+  }
+
+  Widget _mainContent(ResponseProfileModel responseProfileModel) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,10 +72,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 24),
-            Center(child: AvatarWidget()),
+            Center(
+                child: AvatarWidget(responseProfileModel.data.photo_profile)),
             SizedBox(height: 16),
             Center(
-                child: Text('Nama',
+                child: Text(responseProfileModel.data.fullname,
                     style: TextStyle(fontSize: 22, color: Colors.black))),
             SizedBox(height: 16),
             Padding(
@@ -33,19 +87,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text('Bank Name',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),
-                  Text('BCA',
+                  Text(responseProfileModel.data.bank,
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                   SizedBox(height: 16),
                   Text('Bank Account',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),
-                  Text('1234567890',
+                  Text(responseProfileModel.data.bank_account ?? '-',
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                   SizedBox(height: 16),
                   Text('NIK',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),
-                  Text('081234567890011',
+                  Text(responseProfileModel.data.nik,
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                 ],
               ),
@@ -60,9 +114,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
+                  SharedPref().clearSharedPref();
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      (Route<dynamic> route) => false);
                 },
                 child: Text("Log Out", style: TextStyle(color: Colors.white)),
               ),
@@ -75,6 +130,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class AvatarWidget extends StatelessWidget {
+  final urlPhoto;
+
+  const AvatarWidget(this.urlPhoto);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -85,7 +143,7 @@ class AvatarWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: Color(0xFFF0F0F0),
             image: DecorationImage(
-              image: AssetImage('assets/imgs/avatar.jpg'),
+              image: NetworkImage(urlPhoto),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.all(Radius.circular(80.0)),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:loka_apps/function/general_util.dart';
 import 'package:loka_apps/util/color_swatch.dart';
 
 class CreditCardContainer extends StatelessWidget {
-  const CreditCardContainer({
-    Key key,
-  }) : super(key: key);
+  final int limit;
+
+  const CreditCardContainer({Key key, this.limit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class CreditCardContainer extends StatelessWidget {
               height: 11,
             ),
             Text(
-              "Rp 1.000.000",
+              GeneralUtil().intToCurrency(limit),
               style: TextStyle(color: Colors.white, fontSize: 40),
             ),
             SizedBox(
