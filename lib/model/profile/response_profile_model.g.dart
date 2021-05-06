@@ -48,6 +48,9 @@ Data _$DataFromJson(Map<String, dynamic> json) {
     updated_at: json['updated_at'] as String,
     deleted_at: json['deleted_at'] as String,
     photo_profile: json['photo_profile'] as String,
+    company: json['company'] == null
+        ? null
+        : Company.fromJson(json['company'] as Map<String, dynamic>),
   );
 }
 
@@ -72,4 +75,43 @@ Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'updated_at': instance.updated_at,
       'deleted_at': instance.deleted_at,
       'photo_profile': instance.photo_profile,
+      'company': instance.company,
+    };
+
+Company _$CompanyFromJson(Map<String, dynamic> json) {
+  return Company(
+    id: json['id'] as int,
+    name: json['name'] as String,
+    slug: json['slug'] as String,
+    logo: json['logo'] as String,
+    website: json['website'] as String,
+    phone: json['phone'] as String,
+    email: json['email'] as String,
+    fax: json['fax'] as String,
+    description: json['description'] as String,
+    address: json['address'] as String,
+    city_id: json['city_id'] as String,
+    district_id: json['district_id'] as String,
+    status: json['status'] as int,
+    created_at: json['created_at'] as String,
+    updated_at: json['updated_at'] as String,
+  );
+}
+
+Map<String, dynamic> _$CompanyToJson(Company instance) => <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'slug': instance.slug,
+      'logo': instance.logo,
+      'website': instance.website,
+      'phone': instance.phone,
+      'email': instance.email,
+      'fax': instance.fax,
+      'description': instance.description,
+      'address': instance.address,
+      'city_id': instance.city_id,
+      'district_id': instance.district_id,
+      'status': instance.status,
+      'created_at': instance.created_at,
+      'updated_at': instance.updated_at,
     };

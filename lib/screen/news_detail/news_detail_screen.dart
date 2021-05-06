@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:indonesia/indonesia.dart';
+import 'package:intl/intl.dart';
 import 'package:loka_apps/model/news/news_model.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -11,6 +13,18 @@ class NewsDetailScreen extends StatefulWidget {
 }
 
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
+  String date = '';
+
+  @override
+  void initState() {
+    setState(() {
+      DateTime tempDate =
+          DateFormat('yyyy-MM-dd').parse(widget.data.created_at);
+      date = tanggal(tempDate);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +51,21 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         children: [
           Image.network(widget.data.image, fit: BoxFit.cover),
           SizedBox(height: 8),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Text(
+                date,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 4),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Container(

@@ -43,7 +43,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             LoaderDialogs.showLoadingDialog(context, _keyLoader);
           }
           if (state is ProfileLoaded) {}
-          if (state is ProfileError) {}
+          if (state is ProfileError) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (Route<dynamic> route) => false);
+          }
         },
         child: BlocBuilder<ProfileBloc, ProfileState>(
             cubit: profileBloc,
@@ -71,9 +75,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 24),
-            Center(
-                child: AvatarWidget(responseProfileModel.data.photo_profile)),
             SizedBox(height: 16),
             Center(
                 child: Text(responseProfileModel.data.fullname,
@@ -84,6 +85,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text('Nama Lengkap',
+                      style: TextStyle(fontSize: 13, color: Colors.grey)),
+                  SizedBox(height: 4),
+                  Text(responseProfileModel.data.fullname,
+                      style: TextStyle(fontSize: 16, color: Colors.black)),
+                  SizedBox(height: 16),
+                  Text('Nama Company',
+                      style: TextStyle(fontSize: 13, color: Colors.grey)),
+                  SizedBox(height: 4),
+                  Text(responseProfileModel.data.company.name,
+                      style: TextStyle(fontSize: 16, color: Colors.black)),
+                  SizedBox(height: 16),
+                  Text('Phone',
+                      style: TextStyle(fontSize: 13, color: Colors.grey)),
+                  SizedBox(height: 4),
+                  Text(responseProfileModel.data.phone,
+                      style: TextStyle(fontSize: 16, color: Colors.black)),
+                  SizedBox(height: 16),
+                  Text('Email',
+                      style: TextStyle(fontSize: 13, color: Colors.grey)),
+                  SizedBox(height: 4),
+                  Text(responseProfileModel.data.email,
+                      style: TextStyle(fontSize: 16, color: Colors.black)),
+                  SizedBox(height: 16),
+                  Text('Status Pegawai',
+                      style: TextStyle(fontSize: 13, color: Colors.grey)),
+                  SizedBox(height: 4),
+                  Text(responseProfileModel.data.status_employee,
+                      style: TextStyle(fontSize: 16, color: Colors.black)),
+                  SizedBox(height: 16),
+                  Text('Tanggal Menjadi Pegawai',
+                      style: TextStyle(fontSize: 13, color: Colors.grey)),
+                  SizedBox(height: 4),
+                  Text(responseProfileModel.data.date_employee,
+                      style: TextStyle(fontSize: 16, color: Colors.black)),
+                  SizedBox(height: 16),
                   Text('Bank Name',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),

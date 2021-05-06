@@ -39,6 +39,7 @@ class Data {
   String updated_at;
   String deleted_at;
   String photo_profile;
+  Company company;
 
   Data(
       {this.id,
@@ -60,9 +61,51 @@ class Data {
       this.created_at,
       this.updated_at,
       this.deleted_at,
-      this.photo_profile});
+      this.photo_profile,
+      this.company});
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
+}
+
+@JsonSerializable()
+class Company {
+  int id;
+  String name;
+  String slug;
+  String logo;
+  String website;
+  String phone;
+  String email;
+  String fax;
+  String description;
+  String address;
+  String city_id;
+  String district_id;
+  int status;
+  String created_at;
+  String updated_at;
+
+  Company(
+      {this.id,
+      this.name,
+      this.slug,
+      this.logo,
+      this.website,
+      this.phone,
+      this.email,
+      this.fax,
+      this.description,
+      this.address,
+      this.city_id,
+      this.district_id,
+      this.status,
+      this.created_at,
+      this.updated_at});
+
+  factory Company.fromJson(Map<String, dynamic> json) =>
+      _$CompanyFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CompanyToJson(this);
 }
