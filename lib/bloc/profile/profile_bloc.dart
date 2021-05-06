@@ -25,7 +25,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         if (responseProfileModel.code == '200') {
           yield ProfileLoaded(responseProfileModel: responseProfileModel);
         } else {
-          yield ProfileError(error: 'no-data');
+          yield ProfileError(error: 'expired');
         }
       } catch (e) {
         yield ProfileError(error: 'error');

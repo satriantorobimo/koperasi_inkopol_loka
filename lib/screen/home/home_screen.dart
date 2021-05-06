@@ -10,7 +10,11 @@ import 'package:loka_apps/repo/banner/banner_repo.dart';
 import 'package:loka_apps/repo/news/news_repo.dart';
 import 'package:loka_apps/repo/profile/profile_repo.dart';
 import 'package:loka_apps/screen/ajukan/ajukan_screen.dart';
+import 'package:loka_apps/screen/banner_detail/banner_detail_screen.dart';
+import 'package:loka_apps/screen/coming_soon/coming_soon_screen.dart';
+import 'package:loka_apps/screen/login/login_screen.dart';
 import 'package:loka_apps/screen/news_detail/news_detail_screen.dart';
+import 'package:loka_apps/screen/news_list/news_list_screen.dart';
 import 'package:loka_apps/util/credi_card_container.dart';
 import 'package:loka_apps/util/custom_carousel.dart';
 import 'package:loka_apps/util/custom_container.dart';
@@ -50,6 +54,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  Future<void> _getData() async {
+    setState(() {
+      SharedPref().getSharedString('token').then((value) {
+        if (value != null) {
+          profileBloc.add(GetProfile(value));
+        }
+      });
+      bannerBloc.add(GetBanner());
+      newsBloc.add(GetNews());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProfileBloc, ProfileState>(
@@ -70,6 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               isLoading = false;
             });
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (Route<dynamic> route) => false);
           }
         },
         child: BlocBuilder<ProfileBloc, ProfileState>(
@@ -92,199 +111,208 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _mainContent() {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    blurRadius: 5.0,
-                    color: Colors.grey[300],
-                    spreadRadius: 5.0),
-              ],
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(51),
-                bottomLeft: Radius.circular(51),
+    return RefreshIndicator(
+      onRefresh: _getData,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 5.0,
+                      color: Colors.grey[300],
+                      spreadRadius: 5.0),
+                ],
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(51),
+                  bottomLeft: Radius.circular(51),
+                ),
+                color: Colors.white,
               ),
-              color: Colors.white,
-            ),
-            child: Hero(
-              tag: "card",
-              child: Material(
-                color: Colors.transparent,
-                child: !isLoading
-                    ? CreditCardContainer(limit: totalLoan)
-                    : Shimmer.fromColors(
-                        baseColor: Colors.grey.withOpacity(0.4),
-                        highlightColor: Colors.white,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              left: 24, right: 24, top: 8, bottom: 24),
-                          width: double.infinity,
-                          height: 140,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 5.0,
-                                  color: Colors.grey[200],
-                                  offset: Offset(0, 5)),
-                            ],
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        )),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => AjukanScreen()),
-              );
-            },
-            child: Container(
-              width: double.infinity,
-              child: CustomContainer(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/imgs/money.png',
-                      width: 35,
-                    ),
-                    Text(
-                      'Ajukan Pinjaman',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )
-                  ],
+              child: Hero(
+                tag: "card",
+                child: Material(
+                  color: Colors.transparent,
+                  child: !isLoading
+                      ? CreditCardContainer(limit: totalLoan)
+                      : Shimmer.fromColors(
+                          baseColor: Colors.grey.withOpacity(0.4),
+                          highlightColor: Colors.white,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: 24, right: 24, top: 8, bottom: 24),
+                            width: double.infinity,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 5.0,
+                                    color: Colors.grey[200],
+                                    offset: Offset(0, 5)),
+                              ],
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          )),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 8),
-          BlocListener<BannerBloc, BannerState>(
-              cubit: bannerBloc,
-              listener: (_, BannerState state) {},
-              child: BlocBuilder<BannerBloc, BannerState>(
-                  cubit: bannerBloc,
-                  builder: (_, BannerState state) {
-                    if (state is BannerInitial) {
-                      return _loadingCarousel();
-                    }
-                    if (state is BannerLoading) {
-                      return _loadingCarousel();
-                    }
-                    if (state is BannerLoaded) {
-                      return _sliderCarousel(state.bannerResponseModel);
-                    }
-                    if (state is BannerError) {
-                      return Container();
-                    }
-                    return Container();
-                  })),
-          SizedBox(height: 8),
-          CustomContainer(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "Riwayat Pembayaran",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    CustomRoundedButton(
-                      buttonText: "Lihat Semua",
-                      color: Colors.blue,
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15.0,
-                ),
-                Center(
-                  child: Text('Belum ada Riwayat Pembayaran'),
-                )
-                // ListView(
-                //   shrinkWrap: true,
-                //   physics: const NeverScrollableScrollPhysics(),
-                //   children: <Widget>[
-                //     HistoryListTile(
-                //       iconColor: IconColors.transfer,
-                //       onTap: () {},
-                //       transactionAmount: "Rp. 200.000",
-                //       transactionIcon: IconImgs.transfer,
-                //       transactionName: "Pembayaran 1/12",
-                //       transactionType: "PEMBAYARAN",
-                //     ),
-                //     HistoryListTile(
-                //       iconColor: IconColors.transfer,
-                //       onTap: () {},
-                //       transactionAmount: "Rp. 200.000",
-                //       transactionIcon: IconImgs.transfer,
-                //       transactionName: "Pembayaran 2/12",
-                //       transactionType: "PEMBAYARAN",
-                //     ),
-                //     HistoryListTile(
-                //       iconColor: IconColors.transfer,
-                //       onTap: () {},
-                //       transactionAmount: "Rp. 200.000",
-                //       transactionIcon: IconImgs.transfer,
-                //       transactionName: "Pembayaran 3/12",
-                //       transactionType: "PEMBAYARAN",
-                //     ),
-                //   ],
-                // ),
-              ],
-            ),
-          ),
-          SizedBox(height: 8),
-          Container(
-            width: double.infinity,
-            height: 240,
-            color: Colors.white,
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(16),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ComingSoon()),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                child: CustomContainer(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Berita Terkini",
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/imgs/money.png',
+                        width: 35,
                       ),
                       Text(
-                        "Lihat Semua",
-                      ),
+                        'Ajukan Pinjaman',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
                     ],
                   ),
                 ),
-                BlocListener<NewsBloc, NewsState>(
-                    cubit: newsBloc,
-                    listener: (_, NewsState state) {},
-                    child: BlocBuilder<NewsBloc, NewsState>(
-                        cubit: newsBloc,
-                        builder: (_, NewsState state) {
-                          if (state is NewsInitial) {
-                            return _loadingCarousel2();
-                          }
-                          if (state is NewsLoading) {
-                            return _loadingCarousel2();
-                          }
-                          if (state is NewsLoaded) {
-                            return _sliderCarouselNews(state.newsModel);
-                          }
-                          if (state is NewsError) {
-                            return Container();
-                          }
-                          return Container();
-                        })),
-              ],
+              ),
             ),
-          )
-        ],
+            SizedBox(height: 8),
+            BlocListener<BannerBloc, BannerState>(
+                cubit: bannerBloc,
+                listener: (_, BannerState state) {},
+                child: BlocBuilder<BannerBloc, BannerState>(
+                    cubit: bannerBloc,
+                    builder: (_, BannerState state) {
+                      if (state is BannerInitial) {
+                        return _loadingCarousel();
+                      }
+                      if (state is BannerLoading) {
+                        return _loadingCarousel();
+                      }
+                      if (state is BannerLoaded) {
+                        return _sliderCarousel(state.bannerResponseModel);
+                      }
+                      if (state is BannerError) {
+                        return Container();
+                      }
+                      return Container();
+                    })),
+            SizedBox(height: 8),
+            CustomContainer(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Riwayat Pembayaran",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      CustomRoundedButton(
+                        buttonText: "Lihat Semua",
+                        color: Colors.blue,
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Center(
+                    child: Text('Belum ada Riwayat Pembayaran'),
+                  )
+                  // ListView(
+                  //   shrinkWrap: true,
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   children: <Widget>[
+                  //     HistoryListTile(
+                  //       iconColor: IconColors.transfer,
+                  //       onTap: () {},
+                  //       transactionAmount: "Rp. 200.000",
+                  //       transactionIcon: IconImgs.transfer,
+                  //       transactionName: "Pembayaran 1/12",
+                  //       transactionType: "PEMBAYARAN",
+                  //     ),
+                  //     HistoryListTile(
+                  //       iconColor: IconColors.transfer,
+                  //       onTap: () {},
+                  //       transactionAmount: "Rp. 200.000",
+                  //       transactionIcon: IconImgs.transfer,
+                  //       transactionName: "Pembayaran 2/12",
+                  //       transactionType: "PEMBAYARAN",
+                  //     ),
+                  //     HistoryListTile(
+                  //       iconColor: IconColors.transfer,
+                  //       onTap: () {},
+                  //       transactionAmount: "Rp. 200.000",
+                  //       transactionIcon: IconImgs.transfer,
+                  //       transactionName: "Pembayaran 3/12",
+                  //       transactionType: "PEMBAYARAN",
+                  //     ),
+                  //   ],
+                  // ),
+                ],
+              ),
+            ),
+            SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              height: 260,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Berita Terkini",
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => NewsListScreen()));
+                          },
+                          child: Text(
+                            "Lihat Semua",
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  BlocListener<NewsBloc, NewsState>(
+                      cubit: newsBloc,
+                      listener: (_, NewsState state) {},
+                      child: BlocBuilder<NewsBloc, NewsState>(
+                          cubit: newsBloc,
+                          builder: (_, NewsState state) {
+                            if (state is NewsInitial) {
+                              return _loadingCarousel2();
+                            }
+                            if (state is NewsLoading) {
+                              return _loadingCarousel2();
+                            }
+                            if (state is NewsLoaded) {
+                              return _sliderCarouselNews(state.newsModel);
+                            }
+                            if (state is NewsError) {
+                              return Container();
+                            }
+                            return Container();
+                          })),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -295,7 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
           separatorBuilder: (BuildContext context, int index) {
             return SizedBox(width: 2);
           },
-          itemCount: newsModel.data.data.length,
+          itemCount:
+              newsModel.data.data.length < 5 ? newsModel.data.data.length : 5,
           scrollDirection: Axis.horizontal,
           physics: ScrollPhysics(),
           shrinkWrap: true,
@@ -327,7 +356,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 8),
                     Container(
                         width: MediaQuery.of(context).size.width * 0.70,
-                        child: Text(newsModel.data.data[index].title))
+                        child: Text(
+                          newsModel.data.data[index].title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ))
                   ],
                 ),
               ),
@@ -375,15 +408,23 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 174,
       items: bannerResponseModel.data,
       builderFunction: (context, item) {
-        return ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          child: Container(
-              width: MediaQuery.of(context).size.width * 0.90,
-              color: Colors.blue,
-              child: Image.network(
-                item.image,
-                fit: BoxFit.cover,
-              )),
+        return InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => BannerDetailScreen(item.url)),
+            );
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            child: Container(
+                width: MediaQuery.of(context).size.width * 0.90,
+                color: Colors.blue,
+                child: Image.network(
+                  item.image,
+                  fit: BoxFit.cover,
+                )),
+          ),
         );
       },
     );

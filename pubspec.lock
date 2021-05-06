@@ -352,6 +352,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  indonesia:
+    dependency: "direct main"
+    description:
+      name: indonesia
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   intl:
     dependency: "direct main"
     description:
@@ -743,7 +750,7 @@ packages:
     source: hosted
     version: "1.2.0"
   webview_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: webview_flutter
       url: "https://pub.dartlang.org"

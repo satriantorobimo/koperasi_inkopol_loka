@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loka_apps/bloc/profile/bloc.dart';
+import 'package:loka_apps/function/shared_pref.dart';
+import 'package:loka_apps/repo/profile/profile_repo.dart';
 import 'package:loka_apps/screen/home/home_screen.dart';
 import 'package:loka_apps/screen/notifikasi/notifikai_screen.dart';
 import 'package:loka_apps/screen/profile/profile_screen.dart';
@@ -13,6 +17,7 @@ class BottomNavbarScreen extends StatefulWidget {
 
 class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  ProfileBloc profileBloc = ProfileBloc(profileRepository: ProfileRepository());
   int _currentIndex = 0;
   final List<Widget> _children = [
     HomeScreen(),
@@ -21,15 +26,54 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
   ];
 
   @override
+  void initState() {
+    SharedPref().getSharedString('token').then((value) {
+      if (value != null) {
+        profileBloc.add(GetProfile(value));
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    profileBloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffdee4eb),
       key: _scaffoldKey,
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Image.asset('assets/imgs/logo-inkopol.png'),
-        ),
+            padding: const EdgeInsets.only(left: 16.0),
+            child: BlocListener<ProfileBloc, ProfileState>(
+                cubit: profileBloc,
+                listener: (_, ProfileState state) {
+                  if (state is ProfileLoading) {}
+                  if (state is ProfileLoaded) {}
+                  if (state is ProfileError) {}
+                },
+                child: BlocBuilder<ProfileBloc, ProfileState>(
+                    cubit: profileBloc,
+                    builder: (_, ProfileState state) {
+                      if (state is ProfileInitial) {
+                        return Container();
+                      }
+                      if (state is ProfileLoading) {
+                        return Container();
+                      }
+                      if (state is ProfileLoaded) {
+                        return Image.network(
+                            state.responseProfileModel.data.company.logo);
+                      }
+                      if (state is ProfileError) {
+                        return Container();
+                      }
+                      return Container();
+                    }))),
         title: Text(
           'LOKA',
           style: TextStyle(
